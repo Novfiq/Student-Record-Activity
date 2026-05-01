@@ -31,11 +31,21 @@ const storage =
         "student-records",
 
       allowed_formats: [
-        "jpg",
-        "png",
-        "jpeg",
-        "pdf"
-      ]
+  "jpg",
+  "jpeg",
+  "png",
+  "jfif",
+  "pdf",
+  "csv",
+  "doc",
+  "docx",
+  "xls",
+  "xlsx",
+  "ppt",
+  "pptx",
+  "txt",
+  "zip"
+]
     }
   });
 
@@ -229,11 +239,14 @@ router.delete(
     db.query(
 
       `DELETE FROM activities
-       WHERE id=?`,
+       WHERE id=? AND student_id=?`,
 
-      [req.params.id],
+      [
+        req.params.id,
+        req.user.id
+      ],
 
-      (err) => {
+      (err, result) => {
 
         if (err) {
 
@@ -241,6 +254,13 @@ router.delete(
 
           return res.send(
             "Delete Failed"
+          );
+        }
+
+        if (result.affectedRows === 0) {
+
+          return res.send(
+            "No Activity Found"
           );
         }
 
