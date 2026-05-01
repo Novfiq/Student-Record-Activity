@@ -13,12 +13,12 @@ function ActivityCard({ activity }) {
 
   const deleteActivity = async () => {
 
-    const confirmDelete =
+    const ok =
       window.confirm(
         "Delete this activity?"
       );
 
-    if (!confirmDelete) return;
+    if (!ok) return;
 
     try {
 
@@ -37,7 +37,7 @@ function ActivityCard({ activity }) {
         }
       );
 
-      alert("Deleted Successfully");
+      alert("Deleted");
 
       window.location.reload();
 
@@ -112,8 +112,8 @@ function ActivityCard({ activity }) {
           variant="contained"
           color="error"
           onClick={deleteActivity}
-          sx={{
-            ml: 2
+          style={{
+            marginLeft: "10px"
           }}
         >
           Delete
