@@ -13,8 +13,6 @@ function ActivityCard({ activity }) {
 
   const deleteActivity = async () => {
 
-    console.log(activity);
-
     const ok =
       window.confirm(
         "Delete this activity?"
@@ -27,6 +25,8 @@ function ActivityCard({ activity }) {
       const token =
         localStorage.getItem("token");
 
+      console.log(token);
+
       const res =
         await api.delete(
 
@@ -35,7 +35,7 @@ function ActivityCard({ activity }) {
           {
             headers: {
               Authorization:
-                `Bearer ${token}`
+                "Bearer " + token
             }
           }
         );
@@ -48,7 +48,21 @@ function ActivityCard({ activity }) {
 
       console.log(err);
 
-      alert("Delete Failed");
+      if (
+        err.response &&
+        err.response.data
+      ) {
+
+        alert(
+          err.response.data
+        );
+
+      } else {
+
+        alert(
+          "Delete Failed"
+        );
+      }
     }
   };
 
