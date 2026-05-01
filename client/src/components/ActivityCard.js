@@ -37,7 +37,7 @@ function ActivityCard({ activity }) {
         }
       );
 
-      alert("Deleted");
+      alert("Deleted Successfully");
 
       window.location.reload();
 
@@ -87,37 +87,43 @@ function ActivityCard({ activity }) {
           {activity.status}
         </div>
 
-        {
-
-          activity.file && (
-
-            <a
-              href={activity.file}
-              target="_blank"
-              rel="noreferrer"
-            >
-
-              <Button
-                variant="contained"
-                className="view-btn"
-              >
-                View Proof
-              </Button>
-
-            </a>
-          )
-        }
-
-        <Button
-          variant="contained"
-          color="error"
-          onClick={deleteActivity}
+        <div
           style={{
-            marginLeft: "10px"
+            display: "flex",
+            gap: "10px",
+            marginTop: "10px"
           }}
         >
-          Delete
-        </Button>
+
+          {
+            activity.file && (
+
+              <a
+                href={activity.file}
+                target="_blank"
+                rel="noreferrer"
+              >
+
+                <Button
+                  variant="contained"
+                  className="view-btn"
+                >
+                  View Proof
+                </Button>
+
+              </a>
+            )
+          }
+
+          <Button
+            variant="contained"
+            color="error"
+            onClick={deleteActivity}
+          >
+            Delete
+          </Button>
+
+        </div>
 
       </CardContent>
 
