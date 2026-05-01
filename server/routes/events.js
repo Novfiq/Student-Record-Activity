@@ -6,56 +6,46 @@ const router = express.Router();
 
 /* ===== CREATE EVENT ===== */
 
-router.post(
+router.post("/", (req, res) => {
 
-  "/",
+  const {
+    title,
+    description,
+    date
+  } = req.body;
 
-  (req, res) => {
+  db.query(
 
-    const {
+    `INSERT INTO events
+    (title,description,date)
+    VALUES(?,?,?)`,
+
+    [
       title,
       description,
       date
-    } = req.body;
+    ],
 
-    db.query(
+    () => {
 
-      `INSERT INTO events
-      (title,description,date)
-      VALUES(?,?,?)`,
-
-      [
-        title,
-        description,
-        date
-      ],
-
-      () => {
-
-        res.send("Event Added");
-      }
-    );
-  }
-);
+      res.send("Event Added");
+    }
+  );
+});
 
 /* ===== GET EVENTS ===== */
 
-router.get(
+router.get("/", (req, res) => {
 
-  "/",
+  db.query(
 
-  (req, res) => {
+    "SELECT * FROM events",
 
-    db.query(
+    (err, result) => {
 
-      "SELECT * FROM events",
-
-      (err, result) => {
-
-        res.send(result);
-      }
-    );
-  }
-);
+      res.json(result);
+    }
+  );
+});
 
 module.exports = router;
