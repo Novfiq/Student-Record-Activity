@@ -2,30 +2,40 @@ const express = require("express");
 
 const multer = require("multer");
 
-const db = require("../database/db");
+const {
+  CloudinaryStorage
+} = require("multer-storage-cloudinary");
+
+const cloudinary =
+  require("../config/cloudinary");
+
+const db =
+  require("../database/db");
 
 const auth =
   require("../middleware/auth");
 
-const router = express.Router();
+const router =
+  express.Router();
 
-/* ===== MULTER STORAGE ===== */
+/* ===== CLOUDINARY STORAGE ===== */
 
 const storage =
-  multer.diskStorage({
+  new CloudinaryStorage({
 
-    destination: "uploads/",
+    cloudinary: cloudinary,
 
-    filename: (req, file, cb) => {
+    params: {
 
-      cb(
+      folder:
+        "student-records",
 
-        null,
-
-        Date.now() +
-        "-" +
-        file.originalname
-      );
+      allowed_formats: [
+        "jpg",
+        "png",
+        "jpeg",
+        "pdf"
+      ]
     }
   });
 
@@ -51,7 +61,7 @@ router.post(
     } = req.body;
 
     const file =
-      req.file?.filename;
+      req.file?.path;
 
     db.query(
 
