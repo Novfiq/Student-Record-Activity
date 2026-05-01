@@ -1,0 +1,348 @@
+/* ===== GOOGLE FONT ===== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ===== BODY ===== */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0f172a,
+      #1e293b,
+      #0f172a
+    );
+
+  min-height: 100vh;
+  color: white;
+}
+
+/* ===== MAIN ===== */
+
+.main {
+  padding-top: 40px;
+  padding-bottom: 50px;
+}
+
+/* ===== DASHBOARD TITLE ===== */
+
+.dashboard-title {
+
+  text-align: center;
+  font-size: 42px !important;
+  font-weight: 700 !important;
+
+  margin-bottom: 35px !important;
+
+  background: linear-gradient(
+    to right,
+    #38bdf8,
+    #00ffcc
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  letter-spacing: 1px;
+}
+
+/* ===== LOGIN PAGE ===== */
+
+.login-box {
+
+  width: 420px;
+
+  margin: auto;
+  margin-top: 140px;
+
+  padding: 40px;
+
+  border-radius: 25px;
+
+  background: rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0px 8px 32px rgba(0,0,0,0.4);
+
+  text-align: center;
+
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ===== TITLE ===== */
+
+.title {
+
+  font-size: 42px !important;
+  font-weight: 700 !important;
+
+  margin-bottom: 10px !important;
+
+  background: linear-gradient(
+    to right,
+    #00e5ff,
+    #00ff99
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== SUBTITLE ===== */
+
+.subtitle {
+
+  color: #cbd5e1;
+
+  margin-bottom: 30px !important;
+
+  font-size: 18px !important;
+}
+
+/* ===== LOGIN BUTTON ===== */
+
+.login-btn {
+
+  width: 100%;
+
+  padding: 14px !important;
+
+  border-radius: 14px !important;
+
+  background:
+    linear-gradient(
+      to right,
+      #00e5ff,
+      #00ff99
+    ) !important;
+
+  color: black !important;
+
+  font-weight: bold !important;
+
+  font-size: 16px !important;
+
+  transition: 0.3s !important;
+}
+
+.login-btn:hover {
+
+  transform: scale(1.04);
+
+  box-shadow:
+    0px 0px 20px #00e5ff;
+}
+
+/* ===== SECTION TITLES ===== */
+
+.section-title {
+
+  font-size: 28px !important;
+
+  font-weight: 600 !important;
+
+  margin-top: 35px !important;
+  margin-bottom: 20px !important;
+
+  color: #f1f5f9;
+}
+
+/* ===== CARDS ===== */
+
+.card {
+
+  margin-top: 20px;
+
+  border-radius: 22px !important;
+
+  background:
+    rgba(255,255,255,0.08) !important;
+
+  backdrop-filter: blur(18px);
+
+  color: white !important;
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0px 4px 20px rgba(0,0,0,0.3);
+
+  transition: 0.3s;
+}
+
+.card:hover {
+
+  transform: translateY(-5px);
+
+  box-shadow:
+    0px 8px 25px rgba(0,229,255,0.2);
+}
+
+/* ===== INPUT ===== */
+
+.input {
+
+  background: white;
+
+  border-radius: 12px;
+}
+
+/* ===== FILE INPUT ===== */
+
+input[type="file"] {
+
+  margin-top: 15px;
+
+  color: white;
+}
+
+/* ===== ADD BUTTON ===== */
+
+.add-btn {
+
+  margin-top: 10px !important;
+
+  padding: 12px 28px !important;
+
+  border-radius: 14px !important;
+
+  background:
+    linear-gradient(
+      to right,
+      #00ff99,
+      #00e5ff
+    ) !important;
+
+  color: black !important;
+
+  font-weight: bold !important;
+
+  transition: 0.3s !important;
+}
+
+.add-btn:hover {
+
+  transform: scale(1.05);
+
+  box-shadow:
+    0px 0px 18px #00ffcc;
+}
+
+/* ===== ACTIVITY TITLE ===== */
+
+.activity-title {
+
+  font-size: 22px;
+
+  font-weight: 600;
+
+  margin-bottom: 14px;
+
+  color: #f8fafc;
+}
+
+/* ===== STATUS ===== */
+
+.status {
+
+  display: inline-block;
+
+  padding: 8px 16px;
+
+  border-radius: 50px;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  letter-spacing: 0.5px;
+}
+
+/* ===== PENDING ===== */
+
+.pending {
+
+  background:
+    linear-gradient(
+      to right,
+      #f59e0b,
+      #facc15
+    );
+
+  color: black;
+}
+
+/* ===== APPROVED ===== */
+
+.approved {
+
+  background:
+    linear-gradient(
+      to right,
+      #22c55e,
+      #4ade80
+    );
+
+  color: white;
+}
+
+/* ===== CHART BOX ===== */
+
+.chart-box {
+
+  margin-top: 30px;
+
+  padding: 25px;
+
+  border-radius: 24px;
+
+  background:
+    rgba(255,255,255,0.08);
+
+  backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0px 4px 20px rgba(0,0,0,0.3);
+
+  overflow-x: auto;
+}
+
+/* ===== CHART TITLE ===== */
+
+.chart-title {
+
+  font-size: 24px !important;
+
+  font-weight: 600 !important;
+
+  margin-bottom: 20px !important;
+
+  color: #e2e8f0;
+}
+
+/* ===== SCROLLBAR ===== */
+
+::-webkit-scrollbar {
+
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+
+  background: #00e5ff;
+
+  border-radius: 20px;
+}
