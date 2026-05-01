@@ -13,6 +13,8 @@ function ActivityCard({ activity }) {
 
   const deleteActivity = async () => {
 
+    console.log(activity);
+
     const ok =
       window.confirm(
         "Delete this activity?"
@@ -25,19 +27,20 @@ function ActivityCard({ activity }) {
       const token =
         localStorage.getItem("token");
 
-      await api.delete(
+      const res =
+        await api.delete(
 
-        `/activities/${activity.id}`,
+          `/activities/${activity.id}`,
 
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`
+          {
+            headers: {
+              Authorization:
+                `Bearer ${token}`
+            }
           }
-        }
-      );
+        );
 
-      alert("Deleted Successfully");
+      alert(res.data);
 
       window.location.reload();
 
@@ -63,6 +66,10 @@ function ActivityCard({ activity }) {
         </Typography>
 
         <Typography>
+          ID: {activity.id}
+        </Typography>
+
+        <Typography>
           Type: {activity.type}
         </Typography>
 
@@ -75,20 +82,11 @@ function ActivityCard({ activity }) {
           {activity.description}
         </Typography>
 
-        <Typography
-          style={{
-            marginTop: "10px",
-            fontWeight: "bold"
-          }}
-        >
-          Status: {activity.status}
-        </Typography>
-
         <div
           style={{
             display: "flex",
             gap: "10px",
-            marginTop: "15px"
+            marginTop: "10px"
           }}
         >
 
@@ -105,7 +103,7 @@ function ActivityCard({ activity }) {
                   variant="contained"
                   className="view-btn"
                 >
-                  Open File
+                  OPEN FILE
                 </Button>
 
               </a>
@@ -117,7 +115,7 @@ function ActivityCard({ activity }) {
             color="error"
             onClick={deleteActivity}
           >
-            Delete
+            DELETE
           </Button>
 
         </div>
