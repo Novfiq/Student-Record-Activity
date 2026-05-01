@@ -75,23 +75,20 @@ function ActivityCard({ activity }) {
           {activity.description}
         </Typography>
 
-        <div
-          className={
-            activity.status === "Approved"
-              ? "status approved"
-              : activity.status === "Rejected"
-              ? "status rejected"
-              : "status pending"
-          }
+        <Typography
+          style={{
+            marginTop: "10px",
+            fontWeight: "bold"
+          }}
         >
-          {activity.status}
-        </div>
+          Status: {activity.status}
+        </Typography>
 
         <div
           style={{
             display: "flex",
             gap: "10px",
-            marginTop: "10px"
+            marginTop: "15px"
           }}
         >
 
@@ -108,7 +105,7 @@ function ActivityCard({ activity }) {
                   variant="contained"
                   className="view-btn"
                 >
-                  View Proof
+                  Open File
                 </Button>
 
               </a>
