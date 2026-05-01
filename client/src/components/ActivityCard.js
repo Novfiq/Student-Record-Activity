@@ -7,7 +7,45 @@ import {
   Button
 } from "@mui/material";
 
-function ActivityCard({ activity }) {
+import api from "../api";
+
+function ActivityCard({
+  activity,
+  fetchActivities
+}) {
+
+  const deleteActivity =
+    async (id) => {
+
+      try {
+
+        await api.delete(
+          `/activities/${id}`,
+          {
+            headers: {
+              token:
+                localStorage.getItem(
+                  "token"
+                )
+            }
+          }
+        );
+
+        alert(
+          "Activity Deleted"
+        );
+
+        fetchActivities();
+
+      } catch (err) {
+
+        console.log(err);
+
+        alert(
+          "Delete Failed"
+        );
+      }
+    };
 
   return (
 
@@ -51,10 +89,7 @@ function ActivityCard({ activity }) {
           activity.file && (
 
             <a
-              href={
-                "https://student-record-activity.onrender.com/uploads/" +
-                activity.file
-              }
+              href={activity.file}
               target="_blank"
               rel="noreferrer"
             >
@@ -69,6 +104,21 @@ function ActivityCard({ activity }) {
             </a>
           )
         }
+
+        <Button
+          variant="contained"
+          color="error"
+          style={{
+            marginLeft: "10px"
+          }}
+          onClick={() =>
+            deleteActivity(
+              activity.id
+            )
+          }
+        >
+          Delete
+        </Button>
 
       </CardContent>
 
