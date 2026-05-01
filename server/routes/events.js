@@ -17,8 +17,8 @@ router.post("/", (req, res) => {
   db.query(
 
     `INSERT INTO events
-    (title,description,date)
-    VALUES(?,?,?)`,
+    (title, description, date)
+    VALUES (?, ?, ?)`,
 
     [
       title,
@@ -26,9 +26,22 @@ router.post("/", (req, res) => {
       date
     ],
 
-    () => {
+    (err, result) => {
 
-      res.send("Event Added");
+      if (err) {
+
+        console.log("INSERT ERROR:", err);
+
+        return res.status(500).json({
+          success: false,
+          error: err.message
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "Event Added"
+      });
     }
   );
 });
@@ -43,7 +56,20 @@ router.get("/", (req, res) => {
 
     (err, result) => {
 
-      res.json(result);
+      if (err) {
+
+        console.log("SELECT ERROR:", err);
+
+        return res.status(500).json({
+          success: false,
+          error: err.message
+        });
+      }
+
+      res.json({
+        success: true,
+        data: result
+      });
     }
   );
 });
