@@ -224,93 +224,31 @@ router.delete(
 
   auth,
 
-  async (req, res) => {
+  (req, res) => {
 
-    try {
+    db.query(
 
-      db.query(
+      `DELETE FROM activities
+       WHERE id=?`,
 
-        `SELECT file
-         FROM activities
-         WHERE id=?`,
+      [req.params.id],
 
-        [req.params.id],
+      (err) => {
 
-        async (err, result) => {
+        if (err) {
 
-          if (err) {
+          console.log(err);
 
-            console.log(err);
-
-            return res.send(
-              "Delete Failed"
-            );
-          }
-
-          if (result.length > 0) {
-
-            const fileUrl =
-              result[0].file;
-
-            if (fileUrl) {
-
-              const arr =
-                fileUrl.split("/");
-
-              const fileName =
-                arr[arr.length - 1];
-
-              const publicId =
-                "student-records/" +
-                fileName.split(".")[0];
-
-              try {
-
-                await cloudinary.uploader.destroy(
-                  publicId
-                );
-
-              } catch (e) {
-
-                console.log(e);
-              }
-            }
-          }
-
-          db.query(
-
-            `DELETE FROM activities
-             WHERE id=?`,
-
-            [req.params.id],
-
-            (err2) => {
-
-              if (err2) {
-
-                console.log(err2);
-
-                return res.send(
-                  "Delete Failed"
-                );
-              }
-
-              res.send(
-                "Activity Deleted"
-              );
-            }
+          return res.send(
+            "Delete Failed"
           );
         }
-      );
 
-    } catch (err) {
-
-      console.log(err);
-
-      res.send(
-        "Delete Failed"
-      );
-    }
+        res.send(
+          "Activity Deleted"
+        );
+      }
+    );
   }
 );
 
