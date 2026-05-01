@@ -11,41 +11,46 @@ import api from "../api";
 
 function ActivityCard({
   activity,
-  fetchActivities
+  refreshActivities
 }) {
 
-  const deleteActivity =
-    async (id) => {
+  const deleteActivity = async () => {
 
-      try {
+    const confirmDelete =
+      window.confirm(
+        "Are you sure you want to delete this activity?"
+      );
 
-        await api.delete(
-          `/activities/${id}`,
-          {
-            headers: {
-              token:
-                localStorage.getItem(
-                  "token"
-                )
-            }
+    if (!confirmDelete) return;
+
+    try {
+
+      const token =
+        localStorage.getItem("token");
+
+      await api.delete(
+
+        `/activities/${activity.id}`,
+
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`
           }
-        );
+        }
+      );
 
-        alert(
-          "Activity Deleted"
-        );
+      alert("Activity Deleted");
 
-        fetchActivities();
+      refreshActivities();
 
-      } catch (err) {
+    } catch (err) {
 
-        console.log(err);
+      console.log(err);
 
-        alert(
-          "Delete Failed"
-        );
-      }
-    };
+      alert("Delete Failed");
+    }
+  };
 
   return (
 
@@ -86,6 +91,7 @@ function ActivityCard({
         </div>
 
         {
+
           activity.file && (
 
             <a
@@ -108,14 +114,10 @@ function ActivityCard({
         <Button
           variant="contained"
           color="error"
+          onClick={deleteActivity}
           style={{
             marginLeft: "10px"
           }}
-          onClick={() =>
-            deleteActivity(
-              activity.id
-            )
-          }
         >
           Delete
         </Button>
