@@ -9,16 +9,13 @@ import {
 
 import api from "../api";
 
-function ActivityCard({
-  activity,
-  refreshActivities
-}) {
+function ActivityCard({ activity }) {
 
   const deleteActivity = async () => {
 
     const confirmDelete =
       window.confirm(
-        "Are you sure you want to delete this activity?"
+        "Delete this activity?"
       );
 
     if (!confirmDelete) return;
@@ -40,9 +37,9 @@ function ActivityCard({
         }
       );
 
-      alert("Activity Deleted");
+      alert("Deleted Successfully");
 
-      refreshActivities();
+      window.location.reload();
 
     } catch (err) {
 
@@ -115,8 +112,8 @@ function ActivityCard({
           variant="contained"
           color="error"
           onClick={deleteActivity}
-          style={{
-            marginLeft: "10px"
+          sx={{
+            ml: 2
           }}
         >
           Delete
