@@ -228,47 +228,60 @@ router.put(
 
 /* ===== DELETE ACTIVITY ===== */
 
+/* ===== DELETE ACTIVITY ===== */
+
 router.delete(
 
   "/:id",
 
   auth,
 
-  (req, res) => {
+  async (req, res) => {
 
-    db.query(
+    try {
 
-      `DELETE FROM activities
-       WHERE id=? AND student_id=?`,
+      db.query(
 
-      [
-        req.params.id,
-        req.user.id
-      ],
+        `DELETE FROM activities
+         WHERE id=? AND student_id=?`,
 
-      (err, result) => {
+        [
+          req.params.id,
+          req.user.id
+        ],
 
-        if (err) {
+        (err, result) => {
 
-          console.log(err);
+          if (err) {
 
-          return res.send(
-            "Delete Failed"
+            console.log(err);
+
+            return res.send(
+              "Delete Failed"
+            );
+          }
+
+          if (result.affectedRows === 0) {
+
+            return res.send(
+              "No Activity Found"
+            );
+          }
+
+          res.send(
+            "Activity Deleted"
           );
         }
+      );
 
-        if (result.affectedRows === 0) {
+    } catch (err) {
 
-          return res.send(
-            "No Activity Found"
-          );
-        }
+      console.log(err);
 
-        res.send(
-          "Activity Deleted"
-        );
-      }
-    );
+      res.send(
+        "Delete Failed"
+      );
+    }
   }
 );
 
