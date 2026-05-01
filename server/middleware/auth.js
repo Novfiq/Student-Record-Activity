@@ -2,30 +2,37 @@ const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
 
-  const token =
-    req.headers["authorization"];
+  try {
 
-  if (!token) {
+    const header =
+      req.headers.authorization;
 
-    return res.send("No token");
-  }
+    if (!header) {
 
-  jwt.verify(
-    token,
-    "secretkey",
-
-    (err, user) => {
-
-      if (err) {
-
-        return res.send(
-          "Invalid token"
-        );
-      }
-
-      req.user = user;
-
-      next();
+      return res.status(401).send(
+        "No token"
+      );
     }
-  );
+
+    const token =
+      header.split(" ")[1];
+
+    const decoded =
+      jwt.verify(
+        token,
+        "secretkey"
+      );
+
+    req.user = decoded;
+
+    next();
+
+  } catch (err) {
+
+    console.log(err);
+
+    res.status(401).send(
+      "Invalid token"
+    );
+  }
 };

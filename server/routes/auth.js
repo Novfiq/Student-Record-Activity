@@ -1,107 +1,38 @@
-const express = require("express");
-
-const bcrypt = require("bcrypt");
-
 const jwt = require("jsonwebtoken");
 
-const db = require("../database/db");
+module.exports = (req, res, next) => {
 
-const router = express.Router();
+  try {
 
-/* ===== REGISTER ===== */
+    const authHeader =
+      req.headers.authorization;
 
-router.post(
-  "/register",
+    if (!authHeader) {
 
-  async (req, res) => {
+      return res.send(
+        "No token"
+      );
+    }
 
-    const {
-      name,
-      email,
-      password,
-      role,
-      department
-    } = req.body;
+    const token =
+      authHeader.split(" ")[1];
 
-    const hash =
-      await bcrypt.hash(password, 10);
+    const verified =
+      jwt.verify(
+        token,
+        "secretkey"
+      );
 
-    db.query(
+    req.user = verified;
 
-      `INSERT INTO students
-      (name,email,password,role,department)
-      VALUES(?,?,?,?,?)`,
+    next();
 
-      [
-        name,
-        email,
-        hash,
-        role,
-        department
-      ],
+  } catch (err) {
 
-      () => {
+    console.log(err);
 
-        res.send("Registered");
-      }
+    res.send(
+      "Invalid token"
     );
   }
-);
-
-/* ===== LOGIN ===== */
-
-router.post(
-  "/login",
-
-  (req, res) => {
-
-    const {
-      email,
-      password
-    } = req.body;
-
-    db.query(
-
-      "SELECT * FROM students WHERE email=?",
-
-      [email],
-
-      async (err, result) => {
-
-        if (result.length === 0) {
-
-          return res.send(
-            "User not found"
-          );
-        }
-
-        const valid =
-          await bcrypt.compare(
-            password,
-            result[0].password
-          );
-
-        if (!valid) {
-
-          return res.send(
-            "Wrong password"
-          );
-        }
-
-        const token = jwt.sign(
-          result[0],
-          "secretkey"
-        );
-
-        res.send({
-
-          token,
-
-          user: result[0]
-        });
-      }
-    );
-  }
-);
-
-module.exports = router;
+};
