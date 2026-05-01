@@ -103,9 +103,6 @@ function ActivityCard({ activity }) {
               >
                 View Proof
               </Button>
-              <Button>
-                Delete
-              </Button>
 
             </a>
           )
