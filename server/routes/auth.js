@@ -11,6 +11,7 @@ const router = express.Router();
 /* ===== REGISTER ===== */
 
 router.post(
+
   "/register",
 
   async (req, res) => {
@@ -73,6 +74,7 @@ router.post(
 /* ===== LOGIN ===== */
 
 router.post(
+
   "/login",
 
   (req, res) => {
@@ -121,12 +123,18 @@ router.post(
 
         const token =
           jwt.sign(
+
             {
               id: result[0].id,
               email: result[0].email,
               role: result[0].role
             },
-            "secretkey"
+
+            "secretkey",
+
+            {
+              expiresIn: "1d"
+            }
           );
 
         res.send({
