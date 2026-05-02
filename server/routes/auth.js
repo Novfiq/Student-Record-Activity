@@ -122,16 +122,20 @@ router.post(
         }
 
         const token =
-          jwt.sign(
+  jwt.sign(
 
-            {
-              id: result[0].id,
-              email: result[0].email,
-              role: result[0].role
-            },
+    {
+      id: result[0].id,
+      email: result[0].email,
+      role: result[0].role
+    },
 
-            "secretkey"
-          );
+    "secretkey",
+
+    {
+      expiresIn: "1d"
+    }
+  );
 
         res.send({
 

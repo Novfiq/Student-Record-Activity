@@ -1,8 +1,6 @@
 import React, {
-
   useEffect,
   useState
-
 } from "react";
 
 import api from "../api";
@@ -40,15 +38,13 @@ function Dashboard() {
           }
         );
 
-      console.log(res.data);
-
       if (Array.isArray(res.data)) {
 
         setActivities(res.data);
 
       } else {
 
-        alert(res.data);
+        console.log(res.data);
 
         setActivities([]);
       }
@@ -57,38 +53,22 @@ function Dashboard() {
 
       console.log(err);
 
-      alert(
-        "Failed to load activities"
-      );
-
       setActivities([]);
     }
   };
 
   return (
 
-    <div
-      style={{
-        padding: "20px"
-      }}
-    >
+    <div style={{ padding: "20px" }}>
 
-      <h1
-        style={{
-          color: "cyan"
-        }}
-      >
+      <h1 style={{ color: "cyan" }}>
         Student Dashboard
       </h1>
 
       {
         activities.length === 0 ? (
 
-          <h3
-            style={{
-              color: "white"
-            }}
-          >
+          <h3 style={{ color: "white" }}>
             No Activities Found
           </h3>
 
@@ -97,12 +77,10 @@ function Dashboard() {
           activities.map(activity => (
 
             <ActivityCard
-
               key={activity.id}
-
               activity={activity}
-
             />
+
           ))
         )
       }
