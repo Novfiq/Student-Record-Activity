@@ -9,40 +9,68 @@ import {
   CardContent
 } from "@mui/material";
 
-import { useNavigate, Link } from "react-router-dom";
+import {
+  useNavigate,
+  Link
+} from "react-router-dom";
 
 import api from "../api";
 
 function Login() {
 
-  const navigate = useNavigate();
+  const navigate =
+    useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] =
+    useState("");
+
+  const [password, setPassword] =
+    useState("");
 
   const login = async () => {
 
     try {
 
-      const res = await api.post(
-        "/auth/login",
-        {
-          email,
-          password
-        }
-      );
+      const res =
+        await api.post(
+
+          "/auth/login",
+
+          {
+            email,
+            password
+          }
+        );
+
+      console.log(res.data);
+
+      if (!res.data.token) {
+
+        return alert(
+          "Login Failed"
+        );
+      }
 
       localStorage.setItem(
+
         "token",
+
         res.data.token
       );
 
       localStorage.setItem(
+
         "user",
-        JSON.stringify(res.data.user)
+
+        JSON.stringify(
+          res.data.user
+        )
       );
 
-      if (res.data.user.role === "admin") {
+      if (
+        res.data.user.role ===
+        "admin"
+      ) {
 
         navigate("/admin");
 
@@ -53,7 +81,11 @@ function Login() {
 
     } catch (err) {
 
-      alert("Login Failed");
+      console.log(err);
+
+      alert(
+        "Login Failed"
+      );
     }
   };
 
@@ -77,7 +109,9 @@ function Login() {
             label="Email"
             className="input"
             onChange={e =>
-              setEmail(e.target.value)
+              setEmail(
+                e.target.value
+              )
             }
           />
 
@@ -89,7 +123,9 @@ function Login() {
             type="password"
             className="input"
             onChange={e =>
-              setPassword(e.target.value)
+              setPassword(
+                e.target.value
+              )
             }
           />
 
