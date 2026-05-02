@@ -4,7 +4,8 @@ import React, {
 } from "react";
 
 import {
-  Link
+  Link,
+  useNavigate
 } from "react-router-dom";
 
 import api from "../api";
@@ -12,6 +13,9 @@ import api from "../api";
 import ActivityCard from "../components/ActivityCard";
 
 function Dashboard() {
+
+  const navigate =
+    useNavigate();
 
   const [activities, setActivities] =
     useState([]);
@@ -59,6 +63,13 @@ function Dashboard() {
 
       setActivities([]);
     }
+  };
+
+  const logout = () => {
+
+    localStorage.clear();
+
+    navigate("/");
   };
 
   return (
@@ -118,6 +129,18 @@ function Dashboard() {
         <br /><br />
 
         <Link
+          to="/profile"
+          style={{
+            color: "white",
+            textDecoration: "none"
+          }}
+        >
+          Profile
+        </Link>
+
+        <br /><br />
+
+        <Link
           to="/events"
           style={{
             color: "white",
@@ -130,14 +153,32 @@ function Dashboard() {
         <br /><br />
 
         <Link
-          to="/register"
+          to="/reports"
           style={{
             color: "white",
             textDecoration: "none"
           }}
         >
-          Register
+          Reports
         </Link>
+
+        <br /><br />
+
+        <button
+
+          onClick={logout}
+
+          style={{
+            background: "red",
+            color: "white",
+            border: "none",
+            padding: "10px",
+            width: "100%",
+            cursor: "pointer"
+          }}
+        >
+          Logout
+        </button>
 
       </div>
 
