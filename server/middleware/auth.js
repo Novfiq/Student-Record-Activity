@@ -4,26 +4,26 @@ module.exports = (req, res, next) => {
 
   try {
 
-    const header =
+    const authHeader =
       req.headers.authorization;
 
-    if (!header) {
+    if (!authHeader) {
 
-      return res.status(401).send(
+      return res.send(
         "No token"
       );
     }
 
     const token =
-      header.split(" ")[1];
+      authHeader.split(" ")[1];
 
-    const decoded =
+    const verified =
       jwt.verify(
         token,
         "secretkey"
       );
 
-    req.user = decoded;
+    req.user = verified;
 
     next();
 
@@ -31,7 +31,7 @@ module.exports = (req, res, next) => {
 
     console.log(err);
 
-    res.status(401).send(
+    res.send(
       "Invalid token"
     );
   }
