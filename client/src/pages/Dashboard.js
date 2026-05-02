@@ -3,6 +3,10 @@ import React, {
   useState
 } from "react";
 
+import {
+  Link
+} from "react-router-dom";
+
 import api from "../api";
 
 import ActivityCard from "../components/ActivityCard";
@@ -59,31 +63,129 @@ function Dashboard() {
 
   return (
 
-    <div style={{ padding: "20px" }}>
+    <div
+      style={{
+        display: "flex",
+        minHeight: "100vh",
+        background:
+          "linear-gradient(to right,#020617,#0f172a)"
+      }}
+    >
 
-      <h1 style={{ color: "cyan" }}>
-        Student Dashboard
-      </h1>
+      {/* SIDEBAR */}
 
-      {
-        activities.length === 0 ? (
+      <div
+        style={{
+          width: "250px",
+          background: "#1e293b",
+          padding: "20px",
+          color: "white"
+        }}
+      >
 
-          <h3 style={{ color: "white" }}>
-            No Activities Found
-          </h3>
+        <h1
+          style={{
+            color: "cyan"
+          }}
+        >
+          MENU
+        </h1>
 
-        ) : (
+        <br />
 
-          activities.map(activity => (
+        <Link
+          to="/dashboard"
+          style={{
+            color: "white",
+            textDecoration: "none"
+          }}
+        >
+          Dashboard
+        </Link>
 
-            <ActivityCard
-              key={activity.id}
-              activity={activity}
-            />
+        <br /><br />
 
-          ))
-        )
-      }
+        <Link
+          to="/add"
+          style={{
+            color: "white",
+            textDecoration: "none"
+          }}
+        >
+          Add Activity
+        </Link>
+
+        <br /><br />
+
+        <Link
+          to="/events"
+          style={{
+            color: "white",
+            textDecoration: "none"
+          }}
+        >
+          Events
+        </Link>
+
+        <br /><br />
+
+        <Link
+          to="/register"
+          style={{
+            color: "white",
+            textDecoration: "none"
+          }}
+        >
+          Register
+        </Link>
+
+      </div>
+
+      {/* MAIN CONTENT */}
+
+      <div
+        style={{
+          flex: 1,
+          padding: "20px"
+        }}
+      >
+
+        <h1
+          style={{
+            color: "white"
+          }}
+        >
+          Student Dashboard
+        </h1>
+
+        {
+
+          activities.length === 0 ? (
+
+            <h3
+              style={{
+                color: "white"
+              }}
+            >
+              No Activities Found
+            </h3>
+
+          ) : (
+
+            activities.map(activity => (
+
+              <ActivityCard
+
+                key={activity.id}
+
+                activity={activity}
+
+              />
+            ))
+          )
+        }
+
+      </div>
 
     </div>
   );
