@@ -1,82 +1,83 @@
-import React, { useState } from "react";
+import React, {
+  useState
+} from "react";
 
 import {
-  Container,
-  TextField,
-  Button,
-  Card,
-  CardContent
-} from "@mui/material";
+  Link,
+  useNavigate
+} from "react-router-dom";
 
 import api from "../api";
 
-import BackButton from "../components/BackButton";
-
 function AddActivity() {
 
-  const [title, setTitle] = useState("");
+  const navigate =
+    useNavigate();
 
-  const [type, setType] = useState("");
+  const [title, setTitle] =
+    useState("");
+
+  const [type, setType] =
+    useState("");
 
   const [description, setDescription] =
     useState("");
 
-  const [file, setFile] = useState(null);
+  const [file, setFile] =
+    useState(null);
 
-  const add = async () => {
-
-    if (
-      !title ||
-      !type ||
-      !description ||
-      !file
-    ) {
-
-      alert(
-        "Please fill all fields"
-      );
-
-      return;
-    }
-
-    const form = new FormData();
-
-    form.append("title", title);
-
-    form.append("type", type);
-
-    form.append(
-      "description",
-      description
-    );
-
-    form.append("file", file);
+  const addActivity = async () => {
 
     try {
 
-      await api.post(
+      const formData =
+        new FormData();
 
-        "/activities",
-
-        form,
-
-        {
-          headers: {
-
-            Authorization:
-              localStorage.getItem(
-                "token"
-              )
-          }
-        }
+      formData.append(
+        "title",
+        title
       );
 
-      alert("Activity Added");
+      formData.append(
+        "type",
+        type
+      );
 
-      window.location =
-        "/dashboard";
+      formData.append(
+        "description",
+        description
+      );
+
+      formData.append(
+        "file",
+        file
+      );
+
+      const token =
+        localStorage.getItem("token");
+
+      const res =
+        await api.post(
+
+          "/activities",
+
+          formData,
+
+          {
+            headers: {
+              Authorization:
+                "Bearer " + token
+            }
+          }
+        );
+
+      alert(res.data);
+
+      navigate("/dashboard");
 
     } catch (err) {
+
+      console.log(err);
 
       alert(
         "Failed to add activity"
@@ -84,139 +85,228 @@ function AddActivity() {
     }
   };
 
+  const logout = () => {
+
+    localStorage.clear();
+
+    navigate("/");
+  };
+
   return (
 
-    <Container className="center">
+    <div
+      style={{
+        display: "flex",
+        minHeight: "100vh",
+        background:
+          "linear-gradient(to right,#020617,#0f172a)"
+      }}
+    >
 
-      <Card className="glass-card">
+      {/* SIDEBAR */}
 
-        <CardContent>
+      <div
+        style={{
+          width: "250px",
+          background: "#1e293b",
+          padding: "20px",
+          color: "white"
+        }}
+      >
 
-          {}
+        <h1
+          style={{
+            color: "cyan"
+          }}
+        >
+          MENU
+        </h1>
 
-          <BackButton />
+        <br />
 
-          {}
+        <Link
+          to="/dashboard"
+          style={{
+            color: "white",
+            textDecoration: "none"
+          }}
+        >
+          Dashboard
+        </Link>
 
-          <h1 className="title">
-            Add Activity
-          </h1>
+        <br /><br />
 
-          {}
+        <Link
+          to="/add-activity"
+          style={{
+            color: "white",
+            textDecoration: "none"
+          }}
+        >
+          Add Activity
+        </Link>
 
-          <TextField
+        <br /><br />
 
-            fullWidth
+        <Link
+          to="/profile"
+          style={{
+            color: "white",
+            textDecoration: "none"
+          }}
+        >
+          Profile
+        </Link>
 
-            label="Title"
+        <br /><br />
 
-            className="input"
+        <Link
+          to="/events"
+          style={{
+            color: "white",
+            textDecoration: "none"
+          }}
+        >
+          Events
+        </Link>
 
-            onChange={e =>
-              setTitle(
-                e.target.value
-              )
-            }
-          />
+        <br /><br />
 
-          <br /><br />
+        <Link
+          to="/reports"
+          style={{
+            color: "white",
+            textDecoration: "none"
+          }}
+        >
+          Reports
+        </Link>
 
-          {}
+        <br /><br />
 
-          <TextField
+        <button
 
-            fullWidth
+          onClick={logout}
 
-            label="Type"
+          style={{
+            background: "red",
+            color: "white",
+            border: "none",
+            padding: "10px",
+            width: "100%",
+            cursor: "pointer"
+          }}
+        >
+          Logout
+        </button>
 
-            className="input"
+      </div>
 
-            onChange={e =>
-              setType(
-                e.target.value
-              )
-            }
-          />
+      {/* MAIN CONTENT */}
 
-          <br /><br />
+      <div
+        style={{
+          flex: 1,
+          padding: "30px",
+          color: "white"
+        }}
+      >
 
-          {}
+        <h1>
+          Add Activity
+        </h1>
 
-          <TextField
+        <br />
 
-            fullWidth
+        <input
 
-            multiline
+          type="text"
 
-            rows={4}
+          placeholder="Title"
 
-            label="Description"
+          value={title}
 
-            className="input"
-
-            onChange={e =>
-              setDescription(
-                e.target.value
-              )
-            }
-          />
-
-          <br /><br />
-
-          {}
-
-          <label
-            className="custom-file-upload"
-          >
-
-            Choose File
-
-            <input
-
-              type="file"
-
-              onChange={e =>
-                setFile(
-                  e.target.files[0]
-                )
-              }
-            />
-
-          </label>
-
-          {
-            file && (
-
-              <p className="file-name">
-
-                {file.name}
-
-              </p>
-            )
+          onChange={e =>
+            setTitle(e.target.value)
           }
 
-          <br /><br />
+          style={{
+            padding: "10px",
+            width: "300px"
+          }}
+        />
 
-          {}
+        <br /><br />
 
-          <Button
+        <input
 
-            variant="contained"
+          type="text"
 
-            className="primary-btn"
+          placeholder="Type"
 
-            onClick={add}
-          >
+          value={type}
 
-            ADD ACTIVITY
+          onChange={e =>
+            setType(e.target.value)
+          }
 
-          </Button>
+          style={{
+            padding: "10px",
+            width: "300px"
+          }}
+        />
 
-        </CardContent>
+        <br /><br />
 
-      </Card>
+        <textarea
 
-    </Container>
+          placeholder="Description"
+
+          value={description}
+
+          onChange={e =>
+            setDescription(e.target.value)
+          }
+
+          style={{
+            padding: "10px",
+            width: "300px",
+            height: "100px"
+          }}
+        />
+
+        <br /><br />
+
+        <input
+
+          type="file"
+
+          onChange={e =>
+            setFile(
+              e.target.files[0]
+            )
+          }
+        />
+
+        <br /><br />
+
+        <button
+
+          onClick={addActivity}
+
+          style={{
+            padding: "10px",
+            background: "cyan",
+            border: "none",
+            cursor: "pointer"
+          }}
+        >
+          ADD ACTIVITY
+        </button>
+
+      </div>
+
+    </div>
   );
 }
 

@@ -117,7 +117,7 @@ function Dashboard() {
         <br /><br />
 
         <Link
-          to="/add"
+          to="/add-activity"
           style={{
             color: "white",
             textDecoration: "none"
