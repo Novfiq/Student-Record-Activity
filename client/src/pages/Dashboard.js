@@ -42,7 +42,16 @@ function Dashboard() {
 
       console.log(res.data);
 
-      setActivities(res.data);
+      if (Array.isArray(res.data)) {
+
+        setActivities(res.data);
+
+      } else {
+
+        alert(res.data);
+
+        setActivities([]);
+      }
 
     } catch (err) {
 
@@ -51,6 +60,8 @@ function Dashboard() {
       alert(
         "Failed to load activities"
       );
+
+      setActivities([]);
     }
   };
 
@@ -71,16 +82,29 @@ function Dashboard() {
       </h1>
 
       {
-        activities.map(activity => (
+        activities.length === 0 ? (
 
-          <ActivityCard
+          <h3
+            style={{
+              color: "white"
+            }}
+          >
+            No Activities Found
+          </h3>
 
-            key={activity.id}
+        ) : (
 
-            activity={activity}
+          activities.map(activity => (
 
-          />
-        ))
+            <ActivityCard
+
+              key={activity.id}
+
+              activity={activity}
+
+            />
+          ))
+        )
       }
 
     </div>
