@@ -3,7 +3,14 @@ require("dotenv").config();
 const express = require("express");
 const eventsRoutes =require("./routes/events");
 
-const cors = require("cors");
+app.use(cors({
+
+  origin: "https://student-record-activity.vercel.app",
+
+  methods: ["GET", "POST", "PUT", "DELETE"],
+
+  credentials: true
+}));
 
 const authRoutes =
   require("./routes/auth");
