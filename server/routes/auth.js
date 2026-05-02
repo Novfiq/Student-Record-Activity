@@ -1,38 +1,143 @@
+const express = require("express");
+
+const bcrypt = require("bcrypt");
+
 const jwt = require("jsonwebtoken");
 
-module.exports = (req, res, next) => {
+const db = require("../database/db");
 
-  try {
+const router = express.Router();
 
-    const authHeader =
-      req.headers.authorization;
+/* ===== REGISTER ===== */
 
-    if (!authHeader) {
+router.post(
+  "/register",
 
-      return res.send(
-        "No token"
+  async (req, res) => {
+
+    try {
+
+      const {
+        name,
+        email,
+        password,
+        role,
+        department
+      } = req.body;
+
+      const hash =
+        await bcrypt.hash(password, 10);
+
+      db.query(
+
+        `INSERT INTO students
+        (name,email,password,role,department)
+        VALUES(?,?,?,?,?)`,
+
+        [
+          name,
+          email,
+          hash,
+          role,
+          department
+        ],
+
+        (err) => {
+
+          if (err) {
+
+            console.log(err);
+
+            return res.send(
+              "Register Failed"
+            );
+          }
+
+          res.send(
+            "Registered"
+          );
+        }
+      );
+
+    } catch (err) {
+
+      console.log(err);
+
+      res.send(
+        "Register Error"
       );
     }
+  }
+);
 
-    const token =
-      authHeader.split(" ")[1];
+/* ===== LOGIN ===== */
 
-    const verified =
-      jwt.verify(
-        token,
-        "secretkey"
-      );
+router.post(
+  "/login",
 
-    req.user = verified;
+  (req, res) => {
 
-    next();
+    const {
+      email,
+      password
+    } = req.body;
 
-  } catch (err) {
+    db.query(
 
-    console.log(err);
+      "SELECT * FROM students WHERE email=?",
 
-    res.send(
-      "Invalid token"
+      [email],
+
+      async (err, result) => {
+
+        if (err) {
+
+          console.log(err);
+
+          return res.send(
+            "Database Error"
+          );
+        }
+
+        if (result.length === 0) {
+
+          return res.send(
+            "User not found"
+          );
+        }
+
+        const valid =
+          await bcrypt.compare(
+            password,
+            result[0].password
+          );
+
+        if (!valid) {
+
+          return res.send(
+            "Wrong password"
+          );
+        }
+
+        const token =
+          jwt.sign(
+            {
+              id: result[0].id,
+              email: result[0].email,
+              role: result[0].role
+            },
+            "secretkey"
+          );
+
+        res.send({
+
+          token,
+
+          user: result[0]
+        });
+      }
     );
   }
-};
+);
+
+module.exports = router;
