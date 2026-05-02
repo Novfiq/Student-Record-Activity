@@ -130,11 +130,7 @@ router.post(
               role: result[0].role
             },
 
-            "secretkey",
-
-            {
-              expiresIn: "1d"
-            }
+            "secretkey"
           );
 
         res.send({
