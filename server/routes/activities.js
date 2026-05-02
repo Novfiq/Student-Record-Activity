@@ -25,28 +25,31 @@ const storage =
 
     cloudinary: cloudinary,
 
-    params: {
+    params: async (req, file) => ({
 
       folder:
         "student-records",
 
+      resource_type:
+        "auto",
+
       allowed_formats: [
-  "jpg",
-  "jpeg",
-  "png",
-  "jfif",
-  "pdf",
-  "csv",
-  "doc",
-  "docx",
-  "xls",
-  "xlsx",
-  "ppt",
-  "pptx",
-  "txt",
-  "zip"
-]
-    }
+        "jpg",
+        "jpeg",
+        "png",
+        "jfif",
+        "pdf",
+        "csv",
+        "doc",
+        "docx",
+        "xls",
+        "xlsx",
+        "ppt",
+        "pptx",
+        "txt",
+        "zip"
+      ]
+    })
   });
 
 const upload =
@@ -62,47 +65,60 @@ router.post(
 
   upload.single("file"),
 
-  (req, res) => {
+  async (req, res) => {
 
-    const {
-      title,
-      type,
-      description
-    } = req.body;
+    try {
 
-    const file =
-      req.file?.path;
-
-    db.query(
-
-      `INSERT INTO activities
-      (title,type,description,file,student_id)
-      VALUES(?,?,?,?,?)`,
-
-      [
+      const {
         title,
         type,
-        description,
-        file,
-        req.user.id
-      ],
+        description
+      } = req.body;
 
-      (err) => {
+      const file =
+        req.file
+          ? req.file.path
+          : "";
 
-        if (err) {
+      db.query(
 
-          console.log(err);
+        `INSERT INTO activities
+        (title,type,description,file,student_id)
+        VALUES(?,?,?,?,?)`,
 
-          return res.send(
-            "Database Error"
+        [
+          title,
+          type,
+          description,
+          file,
+          req.user.id
+        ],
+
+        (err) => {
+
+          if (err) {
+
+            console.log(err);
+
+            return res.send(
+              "Database Error"
+            );
+          }
+
+          res.send(
+            "Activity Added"
           );
         }
+      );
 
-        res.send(
-          "Activity Added"
-        );
-      }
-    );
+    } catch (err) {
+
+      console.log(err);
+
+      res.send(
+        "Upload Failed"
+      );
+    }
   }
 );
 
@@ -119,9 +135,9 @@ router.get(
     db.query(
 
       `SELECT *
-      FROM activities
-      WHERE student_id=?
-      ORDER BY id DESC`,
+       FROM activities
+       WHERE student_id=?
+       ORDER BY id DESC`,
 
       [req.user.id],
 
@@ -155,13 +171,13 @@ router.get(
         s.name,
         s.department
 
-      FROM activities a
+       FROM activities a
 
-      JOIN students s
+       JOIN students s
 
-      ON a.student_id = s.id
+       ON a.student_id = s.id
 
-      ORDER BY a.id DESC`,
+       ORDER BY a.id DESC`,
 
       (err, result) => {
 
@@ -195,11 +211,11 @@ router.put(
 
       `UPDATE activities
 
-      SET
-        status=?,
-        remarks=?
+       SET
+       status=?,
+       remarks=?
 
-      WHERE id=?`,
+       WHERE id=?`,
 
       [
         status,
@@ -228,60 +244,47 @@ router.put(
 
 /* ===== DELETE ACTIVITY ===== */
 
-/* ===== DELETE ACTIVITY ===== */
-
 router.delete(
 
   "/:id",
 
   auth,
 
-  async (req, res) => {
+  (req, res) => {
 
-    try {
+    db.query(
 
-      db.query(
+      `DELETE FROM activities
+       WHERE id=? AND student_id=?`,
 
-        `DELETE FROM activities
-         WHERE id=? AND student_id=?`,
+      [
+        req.params.id,
+        req.user.id
+      ],
 
-        [
-          req.params.id,
-          req.user.id
-        ],
+      (err, result) => {
 
-        (err, result) => {
+        if (err) {
 
-          if (err) {
+          console.log(err);
 
-            console.log(err);
-
-            return res.send(
-              "Delete Failed"
-            );
-          }
-
-          if (result.affectedRows === 0) {
-
-            return res.send(
-              "No Activity Found"
-            );
-          }
-
-          res.send(
-            "Activity Deleted"
+          return res.send(
+            "Delete Failed"
           );
         }
-      );
 
-    } catch (err) {
+        if (result.affectedRows === 0) {
 
-      console.log(err);
+          return res.send(
+            "No Activity Found"
+          );
+        }
 
-      res.send(
-        "Delete Failed"
-      );
-    }
+        res.send(
+          "Activity Deleted"
+        );
+      }
+    );
   }
 );
 
