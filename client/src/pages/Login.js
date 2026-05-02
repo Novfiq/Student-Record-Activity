@@ -47,7 +47,7 @@ function Login() {
       if (!res.data.token) {
 
         return alert(
-          "Login Failed"
+          "No Token Received"
         );
       }
 
@@ -84,6 +84,11 @@ function Login() {
       console.log(err);
 
       alert(
+
+        err.response?.data ||
+
+        err.message ||
+
         "Login Failed"
       );
     }
@@ -108,6 +113,7 @@ function Login() {
             fullWidth
             label="Email"
             className="input"
+            value={email}
             onChange={e =>
               setEmail(
                 e.target.value
@@ -122,6 +128,7 @@ function Login() {
             label="Password"
             type="password"
             className="input"
+            value={password}
             onChange={e =>
               setPassword(
                 e.target.value

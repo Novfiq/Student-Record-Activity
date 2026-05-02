@@ -39,7 +39,7 @@ router.post(
           name,
           email,
           hash,
-          role,
+          role || "student",
           department
         ],
 
@@ -49,13 +49,13 @@ router.post(
 
             console.log(err);
 
-            return res.send(
+            return res.status(500).send(
               "Register Failed"
             );
           }
 
           res.send(
-            "Registered"
+            "Registered Successfully"
           );
         }
       );
@@ -64,7 +64,7 @@ router.post(
 
       console.log(err);
 
-      res.send(
+      res.status(500).send(
         "Register Error"
       );
     }
@@ -96,53 +96,64 @@ router.post(
 
           console.log(err);
 
-          return res.send(
+          return res.status(500).send(
             "Database Error"
           );
         }
 
         if (result.length === 0) {
 
-          return res.send(
+          return res.status(404).send(
             "User not found"
           );
         }
 
-        const valid =
-          await bcrypt.compare(
-            password,
-            result[0].password
-          );
+        try {
 
-        if (!valid) {
+          const valid =
+            await bcrypt.compare(
+              password,
+              result[0].password
+            );
 
-          return res.send(
-            "Wrong password"
+          if (!valid) {
+
+            return res.status(401).send(
+              "Wrong password"
+            );
+          }
+
+          const token =
+            jwt.sign(
+
+              {
+                id: result[0].id,
+                email: result[0].email,
+                role: result[0].role
+              },
+
+              "secretkey",
+
+              {
+                expiresIn: "1d"
+              }
+            );
+
+          res.send({
+
+            token,
+
+            user: result[0]
+          });
+
+        } catch (e) {
+
+          console.log(e);
+
+          res.status(500).send(
+            "bcrypt Error"
           );
         }
-
-        const token =
-  jwt.sign(
-
-    {
-      id: result[0].id,
-      email: result[0].email,
-      role: result[0].role
-    },
-
-    "secretkey",
-
-    {
-      expiresIn: "1d"
-    }
-  );
-
-        res.send({
-
-          token,
-
-          user: result[0]
-        });
       }
     );
   }
