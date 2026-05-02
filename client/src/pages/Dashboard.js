@@ -1,15 +1,13 @@
 import React, {
+
   useEffect,
   useState
+
 } from "react";
 
 import api from "../api";
 
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
 import ActivityCard from "../components/ActivityCard";
-import Notifications from "../components/Notifications";
-import BackButton from "../components/BackButton";
 
 function Dashboard() {
 
@@ -18,57 +16,74 @@ function Dashboard() {
 
   useEffect(() => {
 
-    api.get(
-      "/activities",
-      {
-        headers: {
-          Authorization:
-            localStorage.getItem("token")
-        }
-      }
-    )
-
-    .then(res => {
-
-      setActivities(res.data);
-
-    });
+    fetchActivities();
 
   }, []);
 
-  return (
+  const fetchActivities = async () => {
 
-    <>
+    try {
 
-      <Navbar />
+      const token =
+        localStorage.getItem("token");
 
-      <div className="layout">
+      const res =
+        await api.get(
 
-        <Sidebar />
-
-        <div className="content">
-          <BackButton />
-          <h1>
-            Student Dashboard
-          </h1>
+          "/activities",
 
           {
-            activities.map(a => (
-
-              <ActivityCard
-                key={a.id}
-                activity={a}
-              />
-            ))
+            headers: {
+              Authorization:
+                "Bearer " + token
+            }
           }
+        );
 
-          <Notifications />
+      console.log(res.data);
 
-        </div>
+      setActivities(res.data);
 
-      </div>
+    } catch (err) {
 
-    </>
+      console.log(err);
+
+      alert(
+        "Failed to load activities"
+      );
+    }
+  };
+
+  return (
+
+    <div
+      style={{
+        padding: "20px"
+      }}
+    >
+
+      <h1
+        style={{
+          color: "cyan"
+        }}
+      >
+        Student Dashboard
+      </h1>
+
+      {
+        activities.map(activity => (
+
+          <ActivityCard
+
+            key={activity.id}
+
+            activity={activity}
+
+          />
+        ))
+      }
+
+    </div>
   );
 }
 
